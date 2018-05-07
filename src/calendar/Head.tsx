@@ -1,4 +1,7 @@
 import React, { PureComponent } from 'react';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft'
+import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight'
 
 export interface IProps {
   month: void|number,
@@ -30,7 +33,7 @@ class Head extends PureComponent<IProps> {
     return (
       <div className="section_mp group_mp">
         <div className="col_mp span_1_of_3_mp arrows_mp"
-          onClick={this.props.onPrev}>&lt;</div>
+          onClick={this.props.onPrev}><FontAwesomeIcon icon={faChevronLeft} /></div>
 
         <div className="col_mp span_1_of_3_mp selected_date_mp"
           onClick={this.props.onValueClick}
@@ -39,7 +42,7 @@ class Head extends PureComponent<IProps> {
         </div>
 
         <div className="col_mp span_1_of_3_mp arrows_mp"
-          onClick={this.props.onNext}>&gt;</div>
+          onClick={this.props.onNext}><FontAwesomeIcon icon={faChevronRight} /></div>
       </div>
     )
   }
