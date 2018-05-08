@@ -4,8 +4,8 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft'
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight'
 
 export interface IProps {
-  month: void|number,
-  year: void|number,
+  month: number,
+  year: number,
   lang: string,
   onNext: () => any,
   onPrev: () => any,
@@ -13,20 +13,10 @@ export interface IProps {
 }
 
 class Head extends PureComponent<IProps> {
-  selectedValue(): string|number {
-    const { month, year } = this.props;
-
-    if (typeof year != 'number') {
-      return '';
-    } else if (typeof month != 'number') {
-      return year;
-    } else {
-      const monthVal = month < 10 ? '0' + month : month;
-      if (this.props.lang == "ja") {
-        return year + '/' + monthVal;
-      }
-      return monthVal + '/' + year;
-    }
+  selectedValue(): number {
+    const { year } = this.props;
+    
+    return year
   };
 
   render(): JSX.Element {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import InputMask from 'react-input-mask';
 
 const DATE_FORMAT = {
-  "default": 'MM/YY',
+  "default": 'MM/YYYY',
   "ja": 'YY/MM'
 }
 
@@ -25,8 +25,8 @@ export interface IProps {
 };
 
 export interface IState {
-  year: void|number,
-  month: void|number,
+  year: number,
+  month: number,
   inputValue: string,
   showCalendar: boolean,
 };
@@ -45,24 +45,24 @@ class MonthPickerInput extends Component<IProps, IState> {
     let inputValue = '';
 
     if (typeof year == 'number' && typeof month == 'number') {
-      inputValue = valuesToMask(month, year, this.props.lang);
+      inputValue = valuesToMask(month, year, this.props.lang);      
     }
-
+    
     this.state = {
-      year,
-      month,
+      year: year || 0,
+      month: month || 0,
       inputValue,
       showCalendar: false,
     }
   };
-
-  onCalendarChange = (year, month): void => {
+  
+  onCalendarChange = (year, month) => {
     const inputValue = valuesToMask(month, year, this.props.lang);
     this.setState({ inputValue, year, month });
     this.onChange(inputValue, year, month);
   };
 
-  onInputChange = (e: { target: { value: string }}): void => {
+  onInputChange = (e: { target: { value: string }}) => {
     const mask = e.target.value;
 
     if (mask.length && mask.indexOf('_') === -1) {
@@ -79,19 +79,19 @@ class MonthPickerInput extends Component<IProps, IState> {
     }
   };
 
-  onInputBlur = (e): void => {
+  onInputBlur = (e) => {
     if (!this.wrapper.contains(e.target)) {
       this.setState({ showCalendar: false })
     }
   };
 
-  onInputFocus = (e): void => {
+  onInputFocus = (e) => {
     if (this.wrapper.contains(e.target)) {
       this.setState({ showCalendar: true });
     }
   };
 
-  onCalendarOutsideClick = (e): void => {
+  onCalendarOutsideClick = (e) => {
     this.setState({ showCalendar: this.input.input == e.target });
   };
 
@@ -118,7 +118,7 @@ class MonthPickerInput extends Component<IProps, IState> {
     }
     return Object.assign({}, {
       ref: input => { if(input) this.input = input; },
-      mask: "99/99",
+      mask: "99/9999",
       placeholder: dateFormat,
       type: 'text',
       onBlur: this.onInputBlur,
@@ -129,7 +129,7 @@ class MonthPickerInput extends Component<IProps, IState> {
 
   render() {
     const { inputValue, showCalendar } = this.state;
-
+    
     return (
       <div ref={wrap => { if(wrap) this.wrapper = wrap; }}>
         <InputMask

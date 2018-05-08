@@ -1,7 +1,7 @@
 export const valuesToMask = (month: number, year: number, lang?: string): string => {
   const monthNum = month + 1;
   const monthVal = monthNum < 10 ? '0' + monthNum : monthNum;
-  const yearVal = year.toString().slice(2);
+  const yearVal = year.toString();
   if (lang == "ja") {
     return yearVal + '/' + monthVal;
   }

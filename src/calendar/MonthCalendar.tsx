@@ -6,8 +6,8 @@ import Head from './Head';
 import { MONTHS_NAMES, VIEW_MONTHS, VIEW_YEARS } from './constants';
 
 export interface IProps {
-  year: void|number,
-  month: void|number,
+  year: number,
+  month: number,
   lang: string,
   startYear?: number,
   onChange: (selectedYear: number, selectedMonth: number) => any,
@@ -15,9 +15,9 @@ export interface IProps {
 }
 
 export interface IState {
-  years: Array<number>,
-  selectedYear: void|number,
-  selectedMonth: void|number,
+  currentYear: number,
+  selectedYear: number,
+  selectedMonth: number,
   currentView: string,
 }
 
@@ -30,23 +30,23 @@ class MonthCalendar extends Component<IProps, IState> {
     const startYear = this.props.startYear || new Date().getFullYear() - 6;
 
     this.state = {
-      years: Array.from({length: 12}, (v, k) => k + startYear),
-      selectedYear: year,
-      selectedMonth: month,
+      currentYear: year || 0,
+      selectedYear: year || 0,
+      selectedMonth: month || 0,
       currentView: year ? VIEW_MONTHS : VIEW_YEARS,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    const { year, month } = nextProps;
-    const { selectedYear, selectedMonth } = this.state;
-
-    if (typeof year == 'number' &&
+    const { month } = nextProps;
+    const { selectedYear, selectedMonth, currentYear } = this.state;
+    
+    if (typeof currentYear == 'number' &&
       typeof month == 'number' &&
-      (year !== selectedYear || month !== selectedMonth)
+      (currentYear !== selectedYear || month !== selectedMonth)
     ) {
       this.setState({
-        selectedYear: year,
+        selectedYear: currentYear,
         selectedMonth: month,
         currentView: VIEW_MONTHS
       });
@@ -70,19 +70,19 @@ class MonthCalendar extends Component<IProps, IState> {
   };
 
   previous = (): void => {
-    const startYear = this.state.years[0] - 12;
-    this.updateYears(startYear);
+    let currentYearDown = this.state.currentYear - 1;
+    this.setState({
+      currentYear: currentYearDown,
+      selectedYear: currentYearDown,
+    });
   }
 
   next = (): void => {
-    const startYear = this.state.years[11] + 1;
-    this.updateYears(startYear);
-  }
-
-  updateYears = (startYear: number): void => {
-    const years = Array.from({length: 12}, (v, k) => k + startYear);
-
-    this.setState({ years, currentView: VIEW_YEARS });
+    let currentYearUp = this.state.currentYear + 1;
+    this.setState({
+      currentYear: currentYearUp,
+      selectedYear: currentYearUp,
+    });
   }
 
   isYears = (): boolean => {
@@ -92,52 +92,33 @@ class MonthCalendar extends Component<IProps, IState> {
   renderMonths = (): JSX.Element[] => {
     const { selectedMonth } = this.state;
 
-    return MONTHS_NAMES[this.props.lang].map((month, index) => {
-      const selectedKlass = selectedMonth === index ? 'selected_cell' : '';
-
+    return MONTHS_NAMES[this.props.lang].map((month, index) => {      
       return (
         <div
           key={index}
           onClick={() => this.selectMonth(index)}
-          className={`col_mp span_1_of_3_mp ${selectedKlass}`}
+          className={`col_mp span_1_of_3_mp`}
         >{month}</div>
       )
     });
   };
 
-  renderYears = (): JSX.Element[] => {
-    const { selectedYear } = this.state;
-
-    return this.state.years.map((year, i) => {
-      const selectedKlass = selectedYear === year ? 'selected_cell' : '';
-
-      return (
-        <div
-          key={i}
-          onClick={() => this.selectYear(year)}
-          className={`col_mp span_1_of_3_mp ${selectedKlass}`}
-        >{year}</div>
-      );
-    });
-  }
-
   render(): JSX.Element {
-    const { selectedYear, selectedMonth } = this.state;
-
+    const { currentYear, selectedMonth } = this.state;
     return (
       <OutsideClickWrapper
         onOutsideClick={this.props.onOutsideClick}
         className="calendar-container"
       >
         <Head
-          year={selectedYear}
-          month={selectedMonth ? selectedMonth + 1 : undefined}
+          year={currentYear}
+          month={selectedMonth + 1}
           lang={this.props.lang}
           onValueClick={() => this.setState({ currentView: VIEW_YEARS })}
           onPrev={this.previous}
           onNext={this.next} />
 
-        {this.isYears() ? this.renderYears() : this.renderMonths()}
+        {this.renderMonths()}
       </OutsideClickWrapper>
     );
   }
