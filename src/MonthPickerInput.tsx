@@ -45,9 +45,9 @@ class MonthPickerInput extends Component<IProps, IState> {
     let inputValue = '';
 
     if (typeof year == 'number' && typeof month == 'number') {
-      inputValue = valuesToMask(month, year, this.props.lang);      
+      inputValue = valuesToMask(month, year, this.props.lang);
     }
-    
+
     this.state = {
       year: year || 0,
       month: month || 0,
@@ -55,7 +55,22 @@ class MonthPickerInput extends Component<IProps, IState> {
       showCalendar: false,
     }
   };
-  
+
+  componentWillReceiveProps(nextProps) {
+    const { year, month } = nextProps;
+    let inputValue = '';
+
+    if (typeof year == 'number' && typeof month == 'number') {
+      inputValue = valuesToMask(month, year, nextProps.lang);
+    }
+
+    this.setState({
+      year: nextProps.year,
+      month: nextProps.month,
+      inputValue: inputValue,
+    })
+  };
+
   onCalendarChange = (year, month) => {
     const inputValue = valuesToMask(month, year, this.props.lang);
     this.setState({ inputValue, year, month });
@@ -129,7 +144,7 @@ class MonthPickerInput extends Component<IProps, IState> {
 
   render() {
     const { inputValue, showCalendar } = this.state;
-    
+
     return (
       <div ref={wrap => { if(wrap) this.wrapper = wrap; }}>
         <InputMask

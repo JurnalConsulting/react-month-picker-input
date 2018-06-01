@@ -384,6 +384,19 @@ var MonthPickerInput = /** @class */ (function (_super) {
         return _this;
     }
     ;
+    MonthPickerInput.prototype.componentWillReceiveProps = function (nextProps) {
+        var year = nextProps.year, month = nextProps.month;
+        var inputValue = '';
+        if (typeof year == 'number' && typeof month == 'number') {
+            inputValue = Object(__WEBPACK_IMPORTED_MODULE_3__utils__["b" /* valuesToMask */])(month, year, nextProps.lang);
+        }
+        this.setState({
+            year: nextProps.year,
+            month: nextProps.month,
+            inputValue: inputValue,
+        });
+    };
+    ;
     MonthPickerInput.prototype.render = function () {
         var _this = this;
         var _a = this.state, inputValue = _a.inputValue, showCalendar = _a.showCalendar;
