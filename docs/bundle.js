@@ -22135,6 +22135,7 @@ var MonthPickerInput = /** @class */ (function (_super) {
                 _this.setState({ inputValue: mask });
         };
         _this.onChange = function (inputValue, year, month) {
+            _this.setState({ showCalendar: false });
             if (_this.props.onChange) {
                 _this.props.onChange(inputValue, year, month);
             }
@@ -22197,7 +22198,7 @@ var MonthPickerInput = /** @class */ (function (_super) {
         this.setState({
             year: nextProps.year,
             month: nextProps.month,
-            inputValue: inputValue,
+            inputValue: inputValue
         });
     };
     ;

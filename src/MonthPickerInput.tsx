@@ -67,7 +67,7 @@ class MonthPickerInput extends Component<IProps, IState> {
     this.setState({
       year: nextProps.year,
       month: nextProps.month,
-      inputValue: inputValue,
+      inputValue: inputValue
     })
   };
 
@@ -89,6 +89,8 @@ class MonthPickerInput extends Component<IProps, IState> {
   };
 
   onChange = (inputValue, year, month) => {
+    this.setState({ showCalendar: false })
+
     if (this.props.onChange) {
       this.props.onChange(inputValue, year, month);
     }
