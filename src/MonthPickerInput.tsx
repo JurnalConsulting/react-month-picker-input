@@ -22,6 +22,7 @@ export interface IProps {
     id?: string,
   },
   onChange?: OnChange,
+  disabled?: boolean,
 };
 
 export interface IState {
@@ -151,6 +152,7 @@ class MonthPickerInput extends Component<IProps, IState> {
       <div ref={wrap => { if(wrap) this.wrapper = wrap; }}>
         <InputMask
           value={inputValue}
+          disabled={this.props.disabled}
           {...this.inputProps()}
         />
 
